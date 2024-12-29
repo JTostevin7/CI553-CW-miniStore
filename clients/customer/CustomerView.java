@@ -33,6 +33,8 @@ public class CustomerView implements Observer
   private final JScrollPane theSP      = new JScrollPane();
   private final JButton     theBtCheck = new JButton( Name.CHECK );
   private final JButton     theBtClear = new JButton( Name.CLEAR );
+  
+  private final JButton theBtSearchByName = new JButton("Search by Name"); //adds search by name button
 
   private Picture thePicture = new Picture(80,80);
   private StockReader theStock   = null;
@@ -94,6 +96,10 @@ public class CustomerView implements Observer
     thePicture.setBounds( 16, 25+60*2, 80, 80 );   // Picture area
     cp.add( thePicture );                           //  Add to canvas
     thePicture.clear();
+    
+    theBtSearchByName.setBounds(16, 25 + 60 * 2, 150, 40 );
+    theBtSearchByName.addActionListener(e -> cont.doSearchByName(theInput.getText()));
+    cp.add(theBtSearchByName);
     
     rootWindow.setVisible( true );                  // Make visible);
     theInput.requestFocus();                        // Focus is here

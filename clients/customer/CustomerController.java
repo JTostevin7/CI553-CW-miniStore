@@ -36,6 +36,10 @@ public class CustomerController
   {
     model.doClear();
   }
+  
+  public void doSearchByName(String name) {
+	  model.doSearchByName(name);
+  }
 
   
 }

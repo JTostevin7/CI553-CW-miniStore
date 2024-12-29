@@ -1,6 +1,7 @@
 package clients.customer;
 
 import catalogue.Basket;
+import java.util.List;
 import catalogue.Product;
 import debug.DEBUG;
 import middle.MiddleFactory;
@@ -120,7 +121,32 @@ public class CustomerModel extends Observable
   private void askForUpdate()
   {
     setChanged(); notifyObservers("START only"); // Notify
+   
   }
+  
+  public void doSearchByName(String productName) {
+	    String theAction = "";
+	    productName = productName.trim(); // Clean the input
+	    try {
+	        List<Product> matchingProducts = theStock.searchByName(productName);
+	        if (!matchingProducts.isEmpty()) {
+	            StringBuilder result = new StringBuilder("Matching products:\n");
+	            for (Product product : matchingProducts) {
+	                result.append(String.format("%s : %7.2f (%2d)\n",
+	                        product.getDescription(),
+	                        product.getPrice(),
+	                        product.getQuantity()));
+	            }
+	            theAction = result.toString();
+	        } else {
+	            theAction = "No products found matching: " + productName;
+	        }
+	    } catch (StockException e) {
+	        theAction = "Error accessing stock: " + e.getMessage();
+	    }
+	    setChanged();
+	    notifyObservers(theAction);
+	}
 
   /**
    * Make a new Basket

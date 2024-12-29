@@ -8,12 +8,17 @@ package dbAccess;
  */
 
 import catalogue.Product;
+
 import debug.DEBUG;
 import middle.StockException;
 import middle.StockReader;
 
 import javax.swing.*;
 import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
+import dbAccess.DBAccess;
+import dbAccess.DBAccessFactory;
 
 // There can only be 1 ResultSet opened per statement
 // so no simultaneous use of the statement object
@@ -171,5 +176,39 @@ public class StockR implements StockReader
     //DEBUG.trace( "DB StockR: getImage -> %s", filename );
     return new ImageIcon( filename );
   }
+
+
+  @Override
+  public List<Product> searchByName(String name) throws StockException {
+      List<Product> matchingProducts = new ArrayList<>();
+      DBAccess dbDriver = (new DBAccessFactory()).getNewDBAccess();
+      try (Connection conn = DriverManager.getConnection(
+              dbDriver.urlOfDatabase(),
+              dbDriver.username(),
+              dbDriver.password());
+           PreparedStatement stmt = conn.prepareStatement(
+              "SELECT p.productNo, p.description, p.price, s.stockLevel " +
+              "FROM ProductTable p " +
+              "JOIN StockTable s ON p.productNo = s.productNo " +
+              "WHERE LOWER(p.description) LIKE ?")) {
+
+          stmt.setString(1, "%" + name.toLowerCase() + "%");
+          ResultSet rs = stmt.executeQuery();
+
+          while (rs.next()) {
+              Product product = new Product(
+                  rs.getString("productNo"),
+                  rs.getString("description"),
+                  rs.getDouble("price"),
+                  rs.getInt("stockLevel")
+              );
+              matchingProducts.add(product);
+          }
+      } catch (SQLException e) {
+          throw new StockException("Error searching by name: " + e.getMessage());
+      }
+      return matchingProducts;
+  }
+
 
 }
