@@ -23,7 +23,7 @@ public class CustomerView implements Observer
     public static final String CLEAR  = "Clear";
   }
 
-  private static final int H = 300;       // Height of window pixels
+  private static final int H = 400;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
 
   private final JLabel      pageTitle  = new JLabel();
@@ -97,7 +97,7 @@ public class CustomerView implements Observer
     cp.add( thePicture );                           //  Add to canvas
     thePicture.clear();
     
-    theBtSearchByName.setBounds(16, 25 + 60 * 2, 150, 40 );
+    theBtSearchByName.setBounds(16, 25 + 60 * 4, 150, 40 );
     theBtSearchByName.addActionListener(e -> cont.doSearchByName(theInput.getText()));
     cp.add(theBtSearchByName);
     
