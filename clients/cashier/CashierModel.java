@@ -4,6 +4,10 @@ import catalogue.Basket;
 import catalogue.Product;
 import debug.DEBUG;
 import middle.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import java.util.Observable;
 
@@ -142,6 +146,7 @@ public class CashierModel extends Observable
            theBasket.size() >= 1 )            // items > 1
       {                                       // T
         theOrder.newOrder( theBasket );       //  Process order
+        generateReceipt();					  //Generates a receipt
         theBasket = null;                     //  reset
       }                                       //
       theAction = "Start New Order";            // New order
@@ -158,8 +163,7 @@ public class CashierModel extends Observable
   }
 
   /**
-   * ask for update of view callled at start of day
-   * or after system reset
+   * applies a 10% discount to the basket total each time
    */
   
   public void applyDiscount() {
@@ -177,6 +181,44 @@ public class CashierModel extends Observable
 	  setChanged();
 	  notifyObservers(theAction);
   }
+  
+  /**
+   * Will generate a receipt for the current basket
+   */
+  public void generateReceipt() {
+	  if(theBasket != null && theBasket.size() == 0) {
+		  System.out.println("Basket is empty. No receipt can be generated");
+		  return;
+	  }
+	  
+	  //define the file name using order number and timestamp
+	  String fileName = "receipts/receipt_" + theBasket.getOrderNum() + ".txt";
+	  try(FileWriter writer = new FileWriter(fileName)){
+		  writer.write("Receipt\n");
+		  writer.write("order number: " + theBasket.getOrderNum() + "\n");
+		  writer.write("Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+ "\n\n");
+		  
+		  writer.write("Products:\n");
+		  for(Product product : theBasket) {
+			  writer.write(String.format("%-20s %5.2f x %d = %5.2f\n",
+					  product.getDescription(),
+					  product.getPrice(),
+					  product.getQuantity(),
+					  product.getPrice() * product.getQuantity()));
+		  }
+		  writer.write("\nTotal: " + String.format("%5.2f\n", theBasket.stream().mapToDouble(p -> p.getPrice() * p.getQuantity()).sum()));
+		  writer.write("\nThank you for your purchase!");
+		  
+		  System.out.println("Receipt generated: " + fileName);
+	  } catch(IOException e ) {
+		  System.out.println("error generating receipt" + e.getMessage());
+	  }
+  }
+  
+  /**
+   * ask for update of view callled at start of day
+   * or after system reset
+   */
   public void askForUpdate()
   {
     setChanged(); notifyObservers("Welcome");
