@@ -36,6 +36,17 @@ public class Basket extends ArrayList<Product> implements Serializable
   {
     theOrderNum = anOrderNum;
   }
+  
+  /**
+   * apply a discount to the total of the basket
+   * @param discountPercentage the discount percentage (for example 0.10 for 10%)
+   */
+  public void applyDiscount(double discountPercentage) {
+	  for (Product product : this) {
+		  double discountPrice = product.getPrice() * (1-discountPercentage);
+		  product.setPrice(discountPrice); //update products price
+	  }
+  }
 
   /**
    * Returns the customers unique order number
@@ -64,6 +75,7 @@ public class Basket extends ArrayList<Product> implements Serializable
    * Returns a description of the products in the basket suitable for printing.
    * @return a string description of the basket products
    */
+ 
   public String getDetails()
   {
     Locale uk = Locale.UK;

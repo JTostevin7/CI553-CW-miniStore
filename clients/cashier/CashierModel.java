@@ -161,6 +161,22 @@ public class CashierModel extends Observable
    * ask for update of view callled at start of day
    * or after system reset
    */
+  
+  public void applyDiscount() {
+	  String theAction = "";
+	  try {
+		  if(theBasket != null & theBasket.size()> 0) {
+			  theBasket.applyDiscount(0.10);//applies a 10% discount
+			  theAction = "10% discount has been applied!";
+		  } else {
+			  theAction = "The basket is empty. Add items before applying a discount";
+		  }
+	  } catch (Exception e) {
+		  theAction = "Error applying the discount" + e.getMessage();
+	  }
+	  setChanged();
+	  notifyObservers(theAction);
+  }
   public void askForUpdate()
   {
     setChanged(); notifyObservers("Welcome");

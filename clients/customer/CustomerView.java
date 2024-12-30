@@ -97,9 +97,9 @@ public class CustomerView implements Observer
     cp.add( thePicture );                           //  Add to canvas
     thePicture.clear();
     
-    theBtSearchByName.setBounds(16, 25 + 60 * 4, 150, 40 );
-    theBtSearchByName.addActionListener(e -> cont.doSearchByName(theInput.getText()));
-    cp.add(theBtSearchByName);
+    theBtSearchByName.setBounds(16, 25 + 60 * 4, 150, 40 ); //search by name button
+    theBtSearchByName.addActionListener(e -> cont.doSearchByName(theInput.getText())); //calls back code
+    cp.add(theBtSearchByName); //adds to canvas
     
     rootWindow.setVisible( true );                  // Make visible);
     theInput.requestFocus();                        // Focus is here
