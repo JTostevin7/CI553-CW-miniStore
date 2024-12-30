@@ -12,13 +12,13 @@ import java.util.Observer;
  * Implements the Customer view.
  */
 
-public class BackDoorView implements Observer
+public class BackDoorView extends JFrame implements Observer
 {
   private static final String RESTOCK  = "Add";
   private static final String CLEAR    = "Clear";
   private static final String QUERY    = "Query";
  
-  private static final int H = 300;       // Height of window pixels
+  private static final int H = 420;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
 
   private final JLabel      pageTitle  = new JLabel();
@@ -30,6 +30,9 @@ public class BackDoorView implements Observer
   private final JButton     theBtClear = new JButton( CLEAR );
   private final JButton     theBtRStock = new JButton( RESTOCK );
   private final JButton     theBtQuery = new JButton( QUERY );
+  
+  private final JButton theBtDarkMode = new JButton("Toggle Dark Mode"); //adds dark mode toggle button
+  private boolean isDarkMode = false; //tracks dark mode state
   
   private StockReadWriter theStock     = null;
   private BackDoorController cont= null;
@@ -90,6 +93,13 @@ public class BackDoorView implements Observer
     theInputNo.setBounds( 260, 50, 120, 40 );       // Input Area
     theInputNo.setText("0");                        // 0
     cp.add( theInputNo );                           //  Add to canvas
+    
+    theBtDarkMode.setBounds(16,25 + 60*5, 150, 40);    //dark mode area
+    theBtDarkMode.addActionListener(e -> {		//calls back code
+    	isDarkMode = !isDarkMode; //toggles the state
+    	setTheme(isDarkMode);
+    });
+    cp.add(theBtDarkMode); //add canvas
 
     theSP.setBounds( 110, 100, 270, 160 );          // Scrolling pane
     theOutput.setText( "" );                        //  Blank
@@ -103,6 +113,32 @@ public class BackDoorView implements Observer
   public void setController( BackDoorController c )
   {
     cont = c;
+  }
+  
+  /**
+   * changes the theme of the view to a darker scheme
+   * @param isDarkMode
+   */
+  
+  public void setTheme(boolean isDarkMode) {
+	  if (isDarkMode) {
+	        getContentPane().setBackground(Color.DARK_GRAY);
+	        pageTitle.setForeground(Color.WHITE);
+	        theAction.setForeground(Color.LIGHT_GRAY);
+	        theInput.setBackground(Color.GRAY);
+	        theInput.setForeground(Color.WHITE);
+	        theOutput.setBackground(Color.GRAY);
+	        theOutput.setForeground(Color.WHITE);
+	    } else {
+	        getContentPane().setBackground(Color.LIGHT_GRAY);
+	        pageTitle.setForeground(Color.BLACK);
+	        theAction.setForeground(Color.BLACK);
+	        theInput.setBackground(Color.WHITE);
+	        theInput.setForeground(Color.BLACK);
+	        theOutput.setBackground(Color.WHITE);
+	        theOutput.setForeground(Color.BLACK);
+	    }
+	    repaint();
   }
 
   /**

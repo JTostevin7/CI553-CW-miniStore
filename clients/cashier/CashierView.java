@@ -14,9 +14,9 @@ import java.util.Observer;
 /**
  * View of the model 
  */
-public class CashierView implements Observer
+public class CashierView extends JFrame implements Observer
 {
-  private static final int H = 300;       // Height of window pixels
+  private static final int H = 420;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
   
   private static final String CHECK  = "Check";
@@ -31,6 +31,9 @@ public class CashierView implements Observer
   private final JButton     theBtCheck = new JButton( CHECK );
   private final JButton     theBtBuy   = new JButton( BUY );
   private final JButton     theBtBought= new JButton( BOUGHT );
+  
+  private final JButton theBtDarkMode = new JButton("Toggle Dark Mode");//adds dark mode toggle button
+  private boolean isDarkMode = false; //tracks dark mode state
 
   private StockReadWriter theStock     = null;
   private OrderProcessing theOrder     = null;
@@ -88,6 +91,13 @@ public class CashierView implements Observer
     theInput.setBounds( 110, 50, 270, 40 );         // Input Area
     theInput.setText("");                           // Blank
     cp.add( theInput );                             //  Add to canvas
+    
+    theBtDarkMode.setBounds(16,25 + 60*5, 150, 40);    //dark mode area
+    theBtDarkMode.addActionListener(e -> {		//calls back code
+    	isDarkMode = !isDarkMode; //toggles the state
+    	setTheme(isDarkMode);
+    });
+    cp.add(theBtDarkMode); //add canvas
 
     theSP.setBounds( 110, 100, 270, 160 );          // Scrolling pane
     theOutput.setText( "" );                        //  Blank
@@ -106,6 +116,30 @@ public class CashierView implements Observer
   public void setController( CashierController c )
   {
     cont = c;
+  }
+  /**
+   * changes the theme of the view to a darker scheme
+   * @param isDarkMode
+   */
+  public void setTheme(boolean isDarkMode) {
+	  if (isDarkMode) {
+	        getContentPane().setBackground(Color.DARK_GRAY);
+	        pageTitle.setForeground(Color.WHITE);
+	        theAction.setForeground(Color.LIGHT_GRAY);
+	        theInput.setBackground(Color.GRAY);
+	        theInput.setForeground(Color.WHITE);
+	        theOutput.setBackground(Color.GRAY);
+	        theOutput.setForeground(Color.WHITE);
+	    } else {
+	        getContentPane().setBackground(Color.LIGHT_GRAY);
+	        pageTitle.setForeground(Color.BLACK);
+	        theAction.setForeground(Color.BLACK);
+	        theInput.setBackground(Color.WHITE);
+	        theInput.setForeground(Color.BLACK);
+	        theOutput.setBackground(Color.WHITE);
+	        theOutput.setForeground(Color.BLACK);
+	    }
+	    repaint();
   }
 
   /**

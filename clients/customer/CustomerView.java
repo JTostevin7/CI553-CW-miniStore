@@ -15,7 +15,7 @@ import java.util.Observer;
  * Implements the Customer view.
  */
 
-public class CustomerView implements Observer
+public class CustomerView extends JFrame implements Observer
 {
   class Name                              // Names of buttons
   {
@@ -23,7 +23,7 @@ public class CustomerView implements Observer
     public static final String CLEAR  = "Clear";
   }
 
-  private static final int H = 400;       // Height of window pixels
+  private static final int H = 420;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
 
   private final JLabel      pageTitle  = new JLabel();
@@ -35,6 +35,8 @@ public class CustomerView implements Observer
   private final JButton     theBtClear = new JButton( Name.CLEAR );
   
   private final JButton theBtSearchByName = new JButton("Search by Name"); //adds search by name button
+  private final JButton theBtDarkMode = new JButton("Toggle Dark Mode"); //adds dark mode toggle button
+  private boolean isDarkMode = false; //tracks dark mode state
 
   private Picture thePicture = new Picture(80,80);
   private StockReader theStock   = null;
@@ -97,9 +99,17 @@ public class CustomerView implements Observer
     cp.add( thePicture );                           //  Add to canvas
     thePicture.clear();
     
-    theBtSearchByName.setBounds(16, 25 + 60 * 4, 150, 40 );
-    theBtSearchByName.addActionListener(e -> cont.doSearchByName(theInput.getText()));
-    cp.add(theBtSearchByName);
+    theBtDarkMode.setBounds(16,25 + 60*5, 150, 40);    //dark mode area
+    theBtDarkMode.addActionListener(e -> {		//calls back code
+    	isDarkMode = !isDarkMode; //toggles the state
+    	setTheme(isDarkMode);
+    });
+    cp.add(theBtDarkMode); //add canvas
+    
+    
+    theBtSearchByName.setBounds(16, 25 + 60 * 4, 150, 40 ); //search by name area
+    theBtSearchByName.addActionListener(e -> cont.doSearchByName(theInput.getText())); //call back code
+    cp.add(theBtSearchByName); //add to canvas
     
     rootWindow.setVisible( true );                  // Make visible);
     theInput.requestFocus();                        // Focus is here
@@ -113,6 +123,32 @@ public class CustomerView implements Observer
   public void setController( CustomerController c )
   {
     cont = c;
+  }
+  
+  /**
+   * changes the theme of the view to a darker scheme
+   * @param isDarkMode
+   */
+  
+  public void setTheme(boolean isDarkMode) {
+	  if (isDarkMode) {
+	        getContentPane().setBackground(Color.DARK_GRAY);
+	        pageTitle.setForeground(Color.WHITE);
+	        theAction.setForeground(Color.LIGHT_GRAY);
+	        theInput.setBackground(Color.GRAY);
+	        theInput.setForeground(Color.WHITE);
+	        theOutput.setBackground(Color.GRAY);
+	        theOutput.setForeground(Color.WHITE);
+	    } else {
+	        getContentPane().setBackground(Color.LIGHT_GRAY);
+	        pageTitle.setForeground(Color.BLACK);
+	        theAction.setForeground(Color.BLACK);
+	        theInput.setBackground(Color.WHITE);
+	        theInput.setForeground(Color.BLACK);
+	        theOutput.setBackground(Color.WHITE);
+	        theOutput.setForeground(Color.BLACK);
+	    }
+	    repaint();
   }
 
   /**

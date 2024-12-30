@@ -14,11 +14,11 @@ import java.util.Observer;
 
  */
 
-public class PackingView implements Observer
+public class PackingView extends JFrame implements Observer
 {
   private static final String PACKED = "Packed";
 
-  private static final int H = 300;       // Height of window pixels
+  private static final int H = 420;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
 
   private final JLabel      pageTitle  = new JLabel();
@@ -26,6 +26,10 @@ public class PackingView implements Observer
   private final JTextArea   theOutput  = new JTextArea();
   private final JScrollPane theSP      = new JScrollPane();
   private final JButton     theBtPack= new JButton( PACKED );
+  
+  private final JButton theBtDarkMode = new JButton("Toggle Dark Mode"); //adds dark mode toggle button
+  private boolean isDarkMode = false; //tracks dark mode state
+  
  
   private OrderProcessing theOrder     = null;
   
@@ -67,6 +71,13 @@ public class PackingView implements Observer
     theAction.setBounds( 110, 25 , 270, 20 );       // Message area
     theAction.setText( "" );                        // Blank
     cp.add( theAction );                            //  Add to canvas
+    
+    theBtDarkMode.setBounds(16,25 + 60*5, 150, 40);    //dark mode area
+    theBtDarkMode.addActionListener(e -> {		//calls back code
+    	isDarkMode = !isDarkMode; //toggles the state
+    	setTheme(isDarkMode);
+    });
+    cp.add(theBtDarkMode); //add canvas
 
     theSP.setBounds( 110, 55, 270, 205 );           // Scrolling pane
     theOutput.setText( "" );                        //  Blank
@@ -79,6 +90,28 @@ public class PackingView implements Observer
   public void setController( PackingController c )
   {
     cont = c;
+  }
+  
+  /**
+   * changes the theme of the view to a darker scheme
+   * @param isDarkMode
+   */
+  
+  public void setTheme(boolean isDarkMode) {
+	  if (isDarkMode) {
+	        getContentPane().setBackground(Color.DARK_GRAY);
+	        pageTitle.setForeground(Color.WHITE);
+	        theAction.setForeground(Color.LIGHT_GRAY);
+	        theOutput.setBackground(Color.GRAY);
+	        theOutput.setForeground(Color.WHITE);
+	    } else {
+	        getContentPane().setBackground(Color.LIGHT_GRAY);
+	        pageTitle.setForeground(Color.BLACK);
+	        theAction.setForeground(Color.BLACK);
+	        theOutput.setBackground(Color.WHITE);
+	        theOutput.setForeground(Color.BLACK);
+	    }
+	    repaint();
   }
 
   /**
