@@ -1,0 +1,12 @@
+Receipt
+order number: 1
+Date: 2024-12-30 16:38:39
+
+Products:
+Watch                21.86 x 1 = 21.86
+Watch                21.86 x 1 = 21.86
+Watch                21.86 x 1 = 21.86
+
+Total: 65.59
+
+Thank you for your purchase!
