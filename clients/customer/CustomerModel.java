@@ -127,6 +127,13 @@ public class CustomerModel extends Observable
   public void doSearchByName(String productName) {
 	    String theAction = "";
 	    productName = productName.trim(); // Clean the input
+	    
+	    if(productName.isEmpty()) {
+	    	theAction = "search cannot be empty. enter a valid name";
+	    	setChanged();
+	    	notifyObservers(theAction);
+	    	return;
+	    }
 	    try {
 	        List<Product> matchingProducts = theStock.searchByName(productName);
 	        if (!matchingProducts.isEmpty()) {

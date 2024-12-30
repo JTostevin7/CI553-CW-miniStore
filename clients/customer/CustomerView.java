@@ -125,6 +125,14 @@ public class CustomerView implements Observer
   {
     CustomerModel model  = (CustomerModel) modelC;
     String        message = (String) arg;
+    
+    if(message.startsWith("Error")|| message.startsWith("Search term")) {
+    	theAction.setText(message);
+    	theOutput.setText("");
+    } else {
+    	theAction.setText("Search results:");
+    	theOutput.setText(message);
+    }
     theAction.setText( message );
     ImageIcon image = model.getPicture();  // Image of product
     if ( image == null )
