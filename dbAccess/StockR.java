@@ -209,6 +209,35 @@ public class StockR implements StockReader
       }
       return matchingProducts;
   }
+  
+  @Override
+  public List<Product> getLowStockItems(int threshold) throws StockException {
+      List<Product> lowStockItems = new ArrayList<>();
+      try (PreparedStatement stmt = theCon.prepareStatement(
+              "SELECT p.productNo, p.description, p.price, s.stockLevel " +
+              "FROM ProductTable p " +
+              "JOIN StockTable s ON p.productNo = s.productNo " +
+              "WHERE s.stockLevel < ?")) {
+
+          stmt.setInt(1, threshold); // Set the threshold
+          ResultSet rs = stmt.executeQuery();
+
+          while (rs.next()) {
+              Product product = new Product(
+                      rs.getString("productNo"),    // Product number
+                      rs.getString("description"), // Description
+                      rs.getDouble("price"),       // Price
+                      rs.getInt("stockLevel")      // Stock level
+              );
+              lowStockItems.add(product);
+          }
+      } catch (SQLException e) {
+          throw new StockException("Error fetching low stock items: " + e.getMessage());
+      }
+      return lowStockItems;
+  }
+
+
 
 
 }

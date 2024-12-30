@@ -1,6 +1,7 @@
 package clients.backDoor;
 
 import catalogue.Basket;
+import java.util.List;
 import catalogue.BetterBasket;
 import catalogue.Product;
 import debug.DEBUG;
@@ -140,6 +141,11 @@ public class BackDoorModel extends Observable
     theAction = "Enter Product Number";       // Set display
     setChanged(); notifyObservers(theAction);  // inform the observer view that model changed
   }
+  
+  public List<Product> getLowStockItems(int threshold) throws StockException {
+	    return theStock.getLowStockItems(threshold);
+	}
+
   
   /**
    * return an instance of a Basket

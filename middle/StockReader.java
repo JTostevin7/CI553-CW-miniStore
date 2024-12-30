@@ -31,6 +31,14 @@ public interface StockReader
   
   Product getDetails(String pNum) throws StockException;
   
+  /**
+   * Returns a list of all low stock items.
+   * @Param threshold threhold of stock to go under
+   * @return list of items under specified amount
+   * @throws StockException if issue
+   */
+  List<Product> getLowStockItems(int threshold) throws StockException;
+  
   
   /**
    * Returns an image of the product in the stock list
@@ -40,7 +48,12 @@ public interface StockReader
    */
   
   ImageIcon getImage(String pNum) throws StockException;
-  
+  /**
+   * Returns 
+   * @param name of the product
+   * @return productname, price, quantity
+   * @throws StockException if issue
+   */
   List<Product> searchByName(String name) throws StockException;
  
 }

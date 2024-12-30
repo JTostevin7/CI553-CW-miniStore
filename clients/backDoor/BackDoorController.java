@@ -1,5 +1,9 @@
 package clients.backDoor;
 
+import catalogue.Product;
+import java.util.List;
+import middle.StockException;
+
 
 /**
  * The BackDoor Controller
@@ -27,6 +31,23 @@ public class BackDoorController
   public void doQuery( String pn )
   {
     model.doQuery(pn);
+  }
+  
+  /**
+   * Low stock interaction from View
+   */
+  public void checkLowStock() {
+	  try {
+		  List<Product> lowStockItems = model.getLowStockItems(5);
+		  StringBuilder result = new StringBuilder("Low Stock Products:\n");
+		  for(Product product: lowStockItems) {
+			  result.append(String.format("%s : %5.2f (%d)\n",
+					  product.getDescription(), product.getPrice(), product.getQuantity()));
+		  }
+		  view.displayMessage(result.toString());
+	  } catch (StockException e) {
+		  view.displayMessage("Error checking low stock items: " + e.getMessage());
+	  }
   }
   
   /**

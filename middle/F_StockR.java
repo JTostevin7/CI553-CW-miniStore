@@ -11,6 +11,7 @@ package middle;
 
 import catalogue.Product;
 
+
 import debug.DEBUG;
 import remote.RemoteStockR_I;
 
@@ -26,6 +27,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import dbAccess.DBAccess;
 import dbAccess.DBAccessFactory;
+import middle.StockException;
+import catalogue.Product;
 
 
 /**
@@ -36,6 +39,8 @@ public class F_StockR implements StockReader
 {
   private RemoteStockR_I aR_StockR   = null;
   private String         theStockURL = null;
+  private final DBAccess dbDriver = (new DBAccessFactory()).getNewDBAccess();
+
 
   public F_StockR( String url )
   {
@@ -78,6 +83,7 @@ public class F_StockR implements StockReader
       throw new StockException( "Net: " + e.getMessage() );
     }
   }
+  
 
   /**
    * Returns details about the product in the stock list
@@ -115,6 +121,40 @@ public class F_StockR implements StockReader
       throw new StockException( "Net: " + e.getMessage() );
     }
   }
+  
+  @Override
+  public List<Product> getLowStockItems(int threshold) throws StockException {
+      List<Product> lowStockItems = new ArrayList<>();
+      try (Connection conn = DriverManager.getConnection(
+              dbDriver.urlOfDatabase(),
+              dbDriver.username(),
+              dbDriver.password());
+           PreparedStatement stmt = conn.prepareStatement(
+              "SELECT p.productNo, p.description, p.price, s.stockLevel " +
+              "FROM ProductTable p " +
+              "JOIN StockTable s ON p.productNo = s.productNo " +
+              "WHERE s.stockLevel < ?")) {
+
+          stmt.setInt(1, threshold); // Set the threshold
+          ResultSet rs = stmt.executeQuery();
+
+          while (rs.next()) {
+              Product product = new Product(
+                      rs.getString("productNo"),    // Product number
+                      rs.getString("description"), // Description
+                      rs.getDouble("price"),       // Price
+                      rs.getInt("stockLevel")      // Stock level
+              );
+              lowStockItems.add(product);
+          }
+      } catch (SQLException e) {
+          throw new StockException("Error fetching low stock items: " + e.getMessage());
+      }
+      return lowStockItems;
+  }
+
+
+
   @Override
   public List<Product> searchByName(String name) throws StockException {
       List<Product> matchingProducts = new ArrayList<>();

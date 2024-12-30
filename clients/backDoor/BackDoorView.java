@@ -1,6 +1,7 @@
 package clients.backDoor;
 
 import middle.MiddleFactory;
+
 import middle.StockReadWriter;
 
 import javax.swing.*;
@@ -33,6 +34,8 @@ public class BackDoorView extends JFrame implements Observer
   
   private final JButton theBtDarkMode = new JButton("Toggle Dark Mode"); //adds dark mode toggle button
   private boolean isDarkMode = false; //tracks dark mode state
+  
+  private final JButton theBtLowStock = new JButton("Low Stock"); //adds button to see what items are low stock
   
   private StockReadWriter theStock     = null;
   private BackDoorController cont= null;
@@ -95,11 +98,15 @@ public class BackDoorView extends JFrame implements Observer
     cp.add( theInputNo );                           //  Add to canvas
     
     theBtDarkMode.setBounds(16,25 + 60*5, 150, 40);    //dark mode area
-    theBtDarkMode.addActionListener(e -> {		//calls back code
+    theBtDarkMode.addActionListener(e -> {		//calls change theme code
     	isDarkMode = !isDarkMode; //toggles the state
     	setTheme(isDarkMode);
     });
     cp.add(theBtDarkMode); //add canvas
+    
+    theBtLowStock.setBounds(16,25+60*4, 150, 40); // button area
+    theBtLowStock.addActionListener(e -> cont.checkLowStock());//calls back code
+    cp.add(theBtLowStock);
 
     theSP.setBounds( 110, 100, 270, 160 );          // Scrolling pane
     theOutput.setText( "" );                        //  Blank
@@ -113,6 +120,10 @@ public class BackDoorView extends JFrame implements Observer
   public void setController( BackDoorController c )
   {
     cont = c;
+  }
+  
+  public void displayMessage(String message) {
+	  theOutput.setText(message);
   }
   
   /**
