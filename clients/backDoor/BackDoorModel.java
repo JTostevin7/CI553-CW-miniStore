@@ -141,9 +141,14 @@ public class BackDoorModel extends Observable
     theAction = "Enter Product Number";       // Set display
     setChanged(); notifyObservers(theAction);  // inform the observer view that model changed
   }
-  
+  /**
+   * gets low stocked items
+   * @param threshold how many items is required to be low stock
+   * @return list of low stock items
+   * @throws StockException if issue
+   */
   public List<Product> getLowStockItems(int threshold) throws StockException {
-	    return theStock.getLowStockItems(threshold);
+	    return theStock.getLowStockItems(threshold); //calls code in the stock
 	}
 
   
