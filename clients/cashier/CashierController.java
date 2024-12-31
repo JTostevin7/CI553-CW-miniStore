@@ -45,4 +45,13 @@ public class CashierController
   {
     model.doBought();
   }
+  
+  /** 
+   * apply discount to the basket
+   */
+  public void applyDiscount() {
+	  model.applyDiscount();
+  }
+  
+  
 }

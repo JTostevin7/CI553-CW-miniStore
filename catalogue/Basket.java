@@ -47,6 +47,17 @@ public class Basket extends ArrayList<Product> implements Serializable
   }
   
   /**
+   * apply a discount to the total of the basket
+   * @param discountPercentage the discount percentage (for example 0.10 for 10%)
+   */
+  public void applyDiscount(double discountPercentage) {
+	  for (Product product : this) {
+		  double discountPrice = product.getPrice() * (1-discountPercentage);
+		  product.setPrice(discountPrice); //update products price
+	  }
+  }
+  
+  /**
    * Add a product to the Basket.
    * Product is appended to the end of the existing products
    * in the basket.

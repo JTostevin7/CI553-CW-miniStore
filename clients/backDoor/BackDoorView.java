@@ -19,7 +19,7 @@ public class BackDoorView extends JFrame implements Observer
   private static final String CLEAR    = "Clear";
   private static final String QUERY    = "Query";
  
-  private static final int H = 420;       // Height of window pixels
+  private static final int H = 500;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
 
   private final JLabel      pageTitle  = new JLabel();
@@ -37,7 +37,7 @@ public class BackDoorView extends JFrame implements Observer
   
   private final JButton theBtLowStock = new JButton("Low Stock"); //adds button to see what items are low stock
   
-  private final JButton theBtSalesReport = new JButton("Sakes Report"); //adds button to see sales report
+  private final JButton theBtSalesReport = new JButton("Sales Report"); //adds button to see sales report
   
   
   private StockReadWriter theStock     = null;
