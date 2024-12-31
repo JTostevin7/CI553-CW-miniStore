@@ -95,6 +95,21 @@ public class CashierModel extends Observable
     }
     setChanged(); notifyObservers(theAction);
   }
+  
+  /**
+   * Undo last item added
+   */
+  
+  public void doUndo() {
+	  if(theBasket !=null && !theBasket.isEmpty()) {
+		  Product removedProduct = theBasket.remove(theBasket.size() -1);
+		  setChanged();
+		  notifyObservers("removed: " + removedProduct.getDescription());
+	  } else {
+		  setChanged();
+		  notifyObservers("no items to undo");
+	  }
+  }
 
   /**
    * Buy the product

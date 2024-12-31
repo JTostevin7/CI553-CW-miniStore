@@ -1,16 +1,10 @@
 Receipt
 order number: 1
-Date: 2024-12-30 16:42:12
+Date: 2024-12-31 17:07:29
 
 Products:
 40 inch LED HD TV    269.00 x 1 = 269.00
-40 inch LED HD TV    269.00 x 1 = 269.00
-DAB Radio            29.99 x 1 = 29.99
-Toaster              19.99 x 1 = 19.99
-Toaster              19.99 x 1 = 19.99
-Toaster              19.99 x 1 = 19.99
-Toaster              19.99 x 1 = 19.99
 
-Total: 647.95
+Total: 269.00
 
 Thank you for your purchase!

@@ -1,0 +1,10 @@
+Receipt
+order number: 2
+Date: 2024-12-31 17:07:56
+
+Products:
+32Gb USB2 drive       5.66 x 1 =  5.66
+
+Total:  5.66
+
+Thank you for your purchase!

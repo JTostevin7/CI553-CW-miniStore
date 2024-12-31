@@ -29,6 +29,13 @@ public class CashierController
   {
     model.doCheck(pn);
   }
+  
+  /**
+   * Undo interaction from view
+   */
+  public void doUndo() {
+	  model.doUndo();
+  }
 
    /**
    * Buy interaction from view

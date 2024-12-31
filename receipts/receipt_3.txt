@@ -1,0 +1,12 @@
+Receipt
+order number: 3
+Date: 2024-12-31 17:08:10
+
+Products:
+32Gb USB2 drive       6.99 x 1 =  6.99
+32Gb USB2 drive       6.99 x 1 =  6.99
+32Gb USB2 drive       6.99 x 1 =  6.99
+
+Total: 20.97
+
+Thank you for your purchase!

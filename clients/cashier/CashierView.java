@@ -36,6 +36,8 @@ public class CashierView extends JFrame implements Observer
   private boolean isDarkMode = false; //tracks dark mode state
   
   private final JButton theBtDiscount = new JButton("Discount"); // adding in discount button
+  
+  private final JButton theBtUndo = new JButton("Undo"); //adding in undo button
 
   private StockReadWriter theStock     = null;
   private OrderProcessing theOrder     = null;
@@ -104,6 +106,10 @@ public class CashierView extends JFrame implements Observer
     theBtDiscount.setBounds(16, 25+ 60*4, 90, 40); //Discount Button
     theBtDiscount.addActionListener(e -> cont.applyDiscount()); //call back code
     cp.add(theBtDiscount); //add to canvas
+    
+    theBtUndo.setBounds(16, 25 + 60*2, 80, 40);
+    theBtUndo.addActionListener( e-> cont.doUndo()); //call back code
+    cp.add(theBtUndo);
 
     theSP.setBounds( 110, 100, 270, 160 );          // Scrolling pane
     theOutput.setText( "" );                        //  Blank
