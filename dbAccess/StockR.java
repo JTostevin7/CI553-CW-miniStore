@@ -12,7 +12,7 @@ import catalogue.Product;
 import debug.DEBUG;
 import middle.StockException;
 import middle.StockReader;
-
+import catalogue.SalesSummary;
 import javax.swing.*;
 import java.sql.*;
 import java.util.List;
@@ -236,6 +236,34 @@ public class StockR implements StockReader
       }
       return lowStockItems;
   }
+  
+  @Override
+  public List<SalesSummary> getSalesSummary() throws StockException {
+      List<SalesSummary> summary = new ArrayList<>();
+      try (PreparedStatement stmt = theCon.prepareStatement(
+              "SELECT p.productNo, p.description, SUM(o.quantity) as totalQuantity, " +
+              "SUM(o.quantity * p.price) as totalRevenue " +
+              "FROM ProductTable p " +
+              "JOIN OrderTable o ON p.productNo = o.productNo " +
+              "GROUP BY p.productNo, p.description")) {
+
+          ResultSet rs = stmt.executeQuery();
+
+          while (rs.next()) {
+              SalesSummary salesSummary = new SalesSummary(
+                  rs.getString("productNo"),
+                  rs.getString("description"),
+                  rs.getInt("totalQuantity"),
+                  rs.getDouble("totalRevenue")
+              );
+              summary.add(salesSummary);
+          }
+      } catch (SQLException e) {
+          throw new StockException("Error generating sales summary: " + e.getMessage());
+      }
+      return summary;
+  }
+
 
 
 

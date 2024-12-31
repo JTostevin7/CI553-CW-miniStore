@@ -37,6 +37,9 @@ public class BackDoorView extends JFrame implements Observer
   
   private final JButton theBtLowStock = new JButton("Low Stock"); //adds button to see what items are low stock
   
+  private final JButton theBtSalesReport = new JButton("Sakes Report"); //adds button to see sales report
+  
+  
   private StockReadWriter theStock     = null;
   private BackDoorController cont= null;
 
@@ -102,11 +105,15 @@ public class BackDoorView extends JFrame implements Observer
     	isDarkMode = !isDarkMode; //toggles the state
     	setTheme(isDarkMode);
     });
-    cp.add(theBtDarkMode); //add canvas
+    cp.add(theBtDarkMode); //add to canvas
     
     theBtLowStock.setBounds(16,25+60*4, 150, 40); // button area
     theBtLowStock.addActionListener(e -> cont.checkLowStock());//calls back code
-    cp.add(theBtLowStock);
+    cp.add(theBtLowStock); //add to canvas
+    
+    theBtSalesReport.setBounds(16, 25+60*6, 150, 40); //button area
+    theBtSalesReport.addActionListener(e -> cont.generateSalesReport()); //calls back code
+    cp.add(theBtSalesReport); //add to canvas
 
     theSP.setBounds( 110, 100, 270, 160 );          // Scrolling pane
     theOutput.setText( "" );                        //  Blank

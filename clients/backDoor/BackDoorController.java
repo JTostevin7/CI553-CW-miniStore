@@ -1,6 +1,7 @@
 package clients.backDoor;
 
 import catalogue.Product;
+import catalogue.SalesSummary;
 import java.util.List;
 import middle.StockException;
 
@@ -48,6 +49,26 @@ public class BackDoorController
 	  } catch (StockException e) {
 		  view.displayMessage("Error checking low stock items: " + e.getMessage());
 	  }
+  }
+  
+  /**
+   * generate sales report interaction from view
+   */
+  public void generateSalesReport() {
+	  try {
+	        List<SalesSummary> salesSummary = model.getSalesSummary();
+	        if (salesSummary.isEmpty()) {
+	            view.displayMessage("No sales data available.");
+	        } else {
+	            StringBuilder report = new StringBuilder("Sales Summary:\n");
+	            for (SalesSummary summary : salesSummary) {
+	                report.append(summary.toString()).append("\n");
+	            }
+	            view.displayMessage(report.toString());
+	        }
+	    } catch (StockException e) {
+	        view.displayMessage("Error generating sales report: " + e.getMessage());
+	    }
   }
   
   /**

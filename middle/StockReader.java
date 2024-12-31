@@ -1,7 +1,7 @@
 package middle;
 
 import catalogue.Product;
-
+import catalogue.SalesSummary;
 import javax.swing.*;
 import java.util.List;
 
@@ -49,12 +49,20 @@ public interface StockReader
   
   ImageIcon getImage(String pNum) throws StockException;
   /**
-   * Returns 
+   * Returns list of names of products if it matches
    * @param name of the product
    * @return productname, price, quantity
    * @throws StockException if issue
    */
   List<Product> searchByName(String name) throws StockException;
+  
+  /**
+   * returns list of all sales
+   * @return Sales Summary
+   * @throws StockException
+   */
+  
+  List<SalesSummary> getSalesSummary() throws StockException;
  
 }
 
