@@ -20,11 +20,12 @@ class Setup
 
 //  "drop table ProductList",
 //  "drop table StockList",
+//  "drop table OrderTable",
 
 
   "drop table ProductTable",
   "create table ProductTable ("+
-      "productNo      Char(4)," +
+      "productNo      Char(4) PRIMARY KEY," +
       "description    Varchar(40)," +
       "picture        Varchar(80)," +
       "price          Float)",
@@ -60,7 +61,14 @@ class Setup
   "insert into StockTable values ( '0007',  01 )",
 
   "select * from StockTable, ProductTable " +
-          " where StockTable.productNo = ProductTable.productNo"
+          " where StockTable.productNo = ProductTable.productNo",
+	//create OrderTable	  
+          "create table OrderTable (" +
+          "orderNo      INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY," +
+          "productNo    Char(4) NOT NULL," +
+          "quantity     INT NOT NULL," +
+          "orderDate    TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+          "FOREIGN KEY (productNo) REFERENCES ProductTable(productNo))",
 
  };
 

@@ -142,6 +142,16 @@ public class CashierModel extends Observable
            theBasket.size() >= 1 )            // items > 1
       {                                       // T
         theOrder.newOrder( theBasket );       //  Process order
+        
+     // Insert each item in the basket into the OrderTable
+        for (Product product : theBasket) {
+        	try {
+            theStock.addOrder(product.getProductNum(), product.getQuantity());
+        	} catch(StockException e) {
+        		System.err.println("error updating order table: " + e.getMessage());
+        	}
+            
+        }
         theBasket = null;                     //  reset
       }                                       //
       theAction = "Start New Order";            // New order

@@ -35,5 +35,16 @@ public interface StockReadWriter extends StockReader
    * @throws middle.StockException if issue
    */
   void modifyStock(Product detail) throws StockException;
+  
+  /**
+   * adds order to orderTable
+   * 
+   * @param productNo product number
+   * @param quantity amount
+   * @throws StockException if issue
+   */
+  
+  void addOrder(String productNo, int quantity) throws StockException;
+
 
 }

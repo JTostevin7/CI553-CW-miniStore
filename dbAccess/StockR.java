@@ -263,6 +263,18 @@ public class StockR implements StockReader
       }
       return summary;
   }
+  
+  public void addOrder(String productNo, int quantity) throws StockException {
+      try (PreparedStatement stmt = theCon.prepareStatement(
+              "INSERT INTO OrderTable (productNo, quantity) VALUES (?, ?)")) {
+          stmt.setString(1, productNo);
+          stmt.setInt(2, quantity);
+          stmt.executeUpdate();
+      } catch (SQLException e) {
+          throw new StockException("Error inserting into OrderTable: " + e.getMessage());
+      }
+  }
+
 
 
 

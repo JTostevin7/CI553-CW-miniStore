@@ -10,6 +10,7 @@ package middle;
  */
 
 import catalogue.Product;
+
 import catalogue.SalesSummary;
 
 

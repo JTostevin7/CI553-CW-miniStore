@@ -10,6 +10,15 @@ package middle;
  */
 
 import catalogue.Product;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import dbAccess.DBAccess;
+import dbAccess.DBAccessFactory;
 import debug.DEBUG;
 import remote.RemoteStockRW_I;
 
@@ -25,11 +34,13 @@ public class F_StockRW extends F_StockR
 {
   private RemoteStockRW_I aR_StockRW  = null;
   private String          theStockURL = null;
+  private final DBAccess dbDriver;
 
   public F_StockRW( String url )
   {
-    super( url );                                   // Not used
+	super( url );                                   // Not used
     theStockURL = url;
+    this.dbDriver = new DBAccess();
   }
   
   private void connect() throws StockException
@@ -113,5 +124,22 @@ public class F_StockRW extends F_StockR
       throw new StockException( "Net: " + e.getMessage() );
     }
   }
+  
+  @Override
+  public void addOrder(String productNo, int quantity) throws StockException {
+      try (Connection conn = DriverManager.getConnection(
+              dbDriver.urlOfDatabase(),
+              dbDriver.username(),
+              dbDriver.password());
+           PreparedStatement stmt = conn.prepareStatement(
+              "INSERT INTO OrderTable (productNo, quantity) VALUES (?, ?)")) {
+          stmt.setString(1, productNo);
+          stmt.setInt(2, quantity);
+          stmt.executeUpdate();
+      } catch (SQLException e) {
+          throw new StockException("Error inserting into OrderTable: " + e.getMessage());
+      }
+  }
+
 
 }
