@@ -1,6 +1,6 @@
 Receipt
 order number: 1
-Date: 2024-12-31 17:07:29
+Date: 2024-12-31 19:07:51
 
 Products:
 40 inch LED HD TV    269.00 x 1 = 269.00

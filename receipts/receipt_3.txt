@@ -1,12 +1,10 @@
 Receipt
 order number: 3
-Date: 2024-12-31 17:08:10
+Date: 2024-12-31 19:08:04
 
 Products:
-32Gb USB2 drive       6.99 x 1 =  6.99
-32Gb USB2 drive       6.99 x 1 =  6.99
-32Gb USB2 drive       6.99 x 1 =  6.99
+DAB Radio            29.99 x 1 = 29.99
 
-Total: 20.97
+Total: 29.99
 
 Thank you for your purchase!

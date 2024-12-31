@@ -1,7 +1,6 @@
 package clients.customer;
 
 import catalogue.Basket;
-import catalogue.BetterBasket;
 import clients.Picture;
 import middle.MiddleFactory;
 import middle.StockReader;
@@ -12,173 +11,169 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Implements the Customer view.
+ * Implements the Customer view with enhanced design and features.
  */
+public class CustomerView extends JFrame implements Observer {
+    private final JLabel pageTitle = new JLabel("Search Products");
+    private final JTextField theInput = new JTextField();
+    private final JTextArea theOutput = new JTextArea();
+    private final JScrollPane outputScrollPane = new JScrollPane(theOutput);
+    private final JLabel availabilityLabel = new JLabel(); // Availability box
+    private final JButton theBtCheck = new JButton("Check");
+    private final JButton theBtClear = new JButton("Clear");
+    private final JButton theBtSearchByName = new JButton("Search by Name");
+    private final JButton theBtDarkMode = new JButton("Toggle Dark Mode");
 
-public class CustomerView extends JFrame implements Observer
-{
-  class Name                              // Names of buttons
-  {
-    public static final String CHECK  = "Check";
-    public static final String CLEAR  = "Clear";
-  }
+    private boolean isDarkMode = false; // Track dark mode state
 
-  private static final int H = 420;       // Height of window pixels
-  private static final int W = 400;       // Width  of window pixels
+    private Picture thePicture = new Picture(80, 80);
+    private StockReader theStock = null;
+    private CustomerController cont = null;
 
-  private final JLabel      pageTitle  = new JLabel();
-  private final JLabel      theAction  = new JLabel();
-  private final JTextField  theInput   = new JTextField();
-  private final JTextArea   theOutput  = new JTextArea();
-  private final JScrollPane theSP      = new JScrollPane();
-  private final JButton     theBtCheck = new JButton( Name.CHECK );
-  private final JButton     theBtClear = new JButton( Name.CLEAR );
-  
-  private final JButton theBtSearchByName = new JButton("Search by Name"); //adds search by name button
-  private final JButton theBtDarkMode = new JButton("Toggle Dark Mode"); //adds dark mode toggle button
-  private boolean isDarkMode = false; //tracks dark mode state
+    /**
+     * Construct the enhanced CustomerView.
+     * @param rpc   Window in which to construct
+     * @param mf    Factory to deliver order and stock objects
+     * @param x     x-coordinate of position of window on screen
+     * @param y     y-coordinate of position of window on screen
+     */
+    public CustomerView(RootPaneContainer rpc, MiddleFactory mf, int x, int y) {
+        try {
+            theStock = mf.makeStockReader(); // Database access
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
 
-  private Picture thePicture = new Picture(80,80);
-  private StockReader theStock   = null;
-  private CustomerController cont= null;
+        Container cp = rpc.getContentPane();
+        cp.setLayout(null);
 
-  /**
-   * Construct the view
-   * @param rpc   Window in which to construct
-   * @param mf    Factor to deliver order and stock objects
-   * @param x     x-cordinate of position of window on screen 
-   * @param y     y-cordinate of position of window on screen  
-   */
-  
-  public CustomerView( RootPaneContainer rpc, MiddleFactory mf, int x, int y )
-  {
-    try                                             // 
-    {      
-      theStock  = mf.makeStockReader();             // Database Access
-    } catch ( Exception e )
-    {
-      System.out.println("Exception: " + e.getMessage() );
+        // Title
+        pageTitle.setBounds(20, 10, 300, 30);
+        pageTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        pageTitle.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+        cp.add(pageTitle);
+
+        // Input Area
+        JLabel productLabel = new JLabel("Product No:");
+        productLabel.setBounds(20, 60, 100, 30);
+        productLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        cp.add(productLabel);
+
+        theInput.setBounds(120, 60, 200, 30);
+        theInput.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        cp.add(theInput);
+
+        // Buttons
+        theBtCheck.setBounds(20, 110, 150, 30);
+        theBtCheck.setBackground(new Color(173, 216, 230));
+        theBtCheck.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
+        cp.add(theBtCheck);
+
+        theBtClear.setBounds(180, 110, 150, 30);
+        theBtClear.setBackground(new Color(173, 216, 230));
+        theBtClear.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
+        cp.add(theBtClear);
+
+        theBtSearchByName.setBounds(180, 160, 150, 30);
+        theBtSearchByName.setBackground(new Color(144, 238, 144));
+        theBtSearchByName.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
+        cp.add(theBtSearchByName);
+
+        theBtDarkMode.setBounds(20, 160, 150, 30);
+        theBtDarkMode.setBackground(new Color(240, 230, 140));
+        theBtDarkMode.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 1));
+        cp.add(theBtDarkMode);
+
+        // Output Area
+        outputScrollPane.setBounds(20, 210, 380, 100);
+        theOutput.setEditable(false);
+        theOutput.setBorder(BorderFactory.createTitledBorder("Order Details"));
+        theOutput.setFont(new Font("Courier New", Font.PLAIN, 14));
+        cp.add(outputScrollPane);
+
+        // Picture Area
+        thePicture.setBounds(350, 60, 80, 80);
+        cp.add(thePicture);
+
+        // Availability Box
+        availabilityLabel.setBounds(20, 320, 380, 30);
+        availabilityLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        availabilityLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        availabilityLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        cp.add(availabilityLabel);
+
+        // Set JFrame-specific properties
+        if (rpc instanceof JFrame) {
+            JFrame frame = (JFrame) rpc;
+            frame.setSize(450, 400);
+            frame.setVisible(true);
+            frame.setLocation(x, y);
+        }
+
+        // Add action listeners
+        theBtCheck.addActionListener(e -> cont.doCheck(theInput.getText()));
+        theBtClear.addActionListener(e -> cont.doClear());
+        theBtSearchByName.addActionListener(e -> cont.doSearchByName(theInput.getText()));
+        theBtDarkMode.addActionListener(e -> {
+            isDarkMode = !isDarkMode;
+            setTheme(isDarkMode);
+        });
+
+        setTheme(isDarkMode); // Apply initial theme
     }
-    Container cp         = rpc.getContentPane();    // Content Pane
-    Container rootWindow = (Container) rpc;         // Root Window
-    cp.setLayout(null);                             // No layout manager
-    rootWindow.setSize( W, H );                     // Size of Window
-    rootWindow.setLocation( x, y );
 
-    Font f = new Font("Monospaced",Font.PLAIN,12);  // Font f is
-    
-    pageTitle.setBounds( 110, 0 , 270, 20 );       
-    pageTitle.setText( "Search products" );                        
-    cp.add( pageTitle );
-
-    theBtCheck.setBounds( 16, 25+60*0, 80, 40 );    // Check button
-    theBtCheck.addActionListener(                   // Call back code
-      e -> cont.doCheck( theInput.getText() ) );
-    cp.add( theBtCheck );                           //  Add to canvas
-
-    theBtClear.setBounds( 16, 25+60*1, 80, 40 );    // Clear button
-    theBtClear.addActionListener(                   // Call back code
-      e -> cont.doClear() );
-    cp.add( theBtClear );                           //  Add to canvas
-
-    theAction.setBounds( 110, 25 , 270, 20 );       // Message area
-    theAction.setText( " " );                       // blank
-    cp.add( theAction );                            //  Add to canvas
-
-    theInput.setBounds( 110, 50, 270, 40 );         // Product no area
-    theInput.setText("");                           // Blank
-    cp.add( theInput );                             //  Add to canvas
-    
-    theSP.setBounds( 110, 100, 270, 160 );          // Scrolling pane
-    theOutput.setText( "" );                        //  Blank
-    theOutput.setFont( f );                         //  Uses font  
-    cp.add( theSP );                                //  Add to canvas
-    theSP.getViewport().add( theOutput );           //  In TextArea
-
-    thePicture.setBounds( 16, 25+60*2, 80, 80 );   // Picture area
-    cp.add( thePicture );                           //  Add to canvas
-    thePicture.clear();
-    
-    theBtDarkMode.setBounds(16,25 + 60*5, 150, 40);    //dark mode area
-    theBtDarkMode.addActionListener(e -> {		//calls back code
-    	isDarkMode = !isDarkMode; //toggles the state
-    	setTheme(isDarkMode);
-    });
-    cp.add(theBtDarkMode); //add canvas
-    
-    
-    theBtSearchByName.setBounds(16, 25 + 60 * 4, 150, 40 ); //search by name area
-    theBtSearchByName.addActionListener(e -> cont.doSearchByName(theInput.getText())); //call back code
-    cp.add(theBtSearchByName); //add to canvas
-    
-    rootWindow.setVisible( true );                  // Make visible);
-    theInput.requestFocus();                        // Focus is here
-  }
-
-   /**
-   * The controller object, used so that an interaction can be passed to the controller
-   * @param c   The controller
-   */
-
-  public void setController( CustomerController c )
-  {
-    cont = c;
-  }
-  
-  /**
-   * changes the theme of the view to a darker scheme
-   * @param isDarkMode
-   */
-  
-  public void setTheme(boolean isDarkMode) {
-	  if (isDarkMode) {
-	        getContentPane().setBackground(Color.DARK_GRAY);
-	        pageTitle.setForeground(Color.WHITE);
-	        theAction.setForeground(Color.LIGHT_GRAY);
-	        theInput.setBackground(Color.GRAY);
-	        theInput.setForeground(Color.WHITE);
-	        theOutput.setBackground(Color.GRAY);
-	        theOutput.setForeground(Color.WHITE);
-	    } else {
-	        getContentPane().setBackground(Color.LIGHT_GRAY);
-	        pageTitle.setForeground(Color.BLACK);
-	        theAction.setForeground(Color.BLACK);
-	        theInput.setBackground(Color.WHITE);
-	        theInput.setForeground(Color.BLACK);
-	        theOutput.setBackground(Color.WHITE);
-	        theOutput.setForeground(Color.BLACK);
-	    }
-	    repaint();
-  }
-
-  /**
-   * Update the view
-   * @param modelC   The observed model
-   * @param arg      Specific args 
-   */
-   
-  public void update( Observable modelC, Object arg )
-  {
-    CustomerModel model  = (CustomerModel) modelC;
-    String        message = (String) arg;
-    
-    if(message.startsWith("Error")|| message.startsWith("Search term")) {
-    	theAction.setText(message);
-    	theOutput.setText("");
-    } else {
-    	theAction.setText("Search results:");
-    	theOutput.setText(message);
+    /**
+     * Set the controller for this view.
+     * @param c The controller
+     */
+    public void setController(CustomerController c) {
+        cont = c;
     }
-    theAction.setText( message );
-    ImageIcon image = model.getPicture();  // Image of product
-    if ( image == null )
-    {
-      thePicture.clear();                  // Clear picture
-    } else {
-      thePicture.set( image );             // Display picture
-    }
-    theOutput.setText( model.getBasket().getDetails() );
-    theInput.requestFocus();               // Focus is here
-  }
 
+    /**
+     * Change the theme of the view.
+     * @param isDarkMode whether dark mode is enabled
+     */
+    public void setTheme(boolean isDarkMode) {
+        if (isDarkMode) {
+            getContentPane().setBackground(Color.DARK_GRAY);
+            pageTitle.setForeground(Color.WHITE);
+            theInput.setBackground(Color.GRAY);
+            theInput.setForeground(Color.WHITE);
+            theOutput.setBackground(Color.GRAY);
+            theOutput.setForeground(Color.WHITE);
+            availabilityLabel.setBackground(Color.GRAY);
+            availabilityLabel.setForeground(Color.WHITE);
+        } else {
+            getContentPane().setBackground(Color.LIGHT_GRAY);
+            pageTitle.setForeground(Color.BLACK);
+            theInput.setBackground(Color.WHITE);
+            theInput.setForeground(Color.BLACK);
+            theOutput.setBackground(Color.WHITE);
+            theOutput.setForeground(Color.BLACK);
+            availabilityLabel.setBackground(Color.WHITE);
+            availabilityLabel.setForeground(Color.BLACK);
+        }
+        repaint();
+    }
+
+    /**
+     * Update the view.
+     * @param modelC The observed model
+     * @param arg    Specific args
+     */
+    @Override
+    public void update(Observable modelC, Object arg) {
+        CustomerModel model = (CustomerModel) modelC;
+        String message = (String) arg;
+        theOutput.setText(model.getBasket() == null ? "" : model.getBasket().getDetails());
+        availabilityLabel.setText(message);
+        ImageIcon image = model.getPicture();
+        if (image == null) {
+            thePicture.clear();
+        } else {
+            thePicture.set(image);
+        }
+        theInput.requestFocus();
+    }
 }
