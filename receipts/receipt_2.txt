@@ -1,10 +1,10 @@
 Receipt
 order number: 2
-Date: 2024-12-31 19:08:00
+Date: 2025-01-01 14:51:27
 
 Products:
-40 inch LED HD TV    269.00 x 1 = 269.00
+MP3 player            7.99 x 1 =  7.99
 
-Total: 269.00
+Total:  7.99
 
 Thank you for your purchase!

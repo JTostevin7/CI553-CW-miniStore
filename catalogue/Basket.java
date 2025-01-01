@@ -1,6 +1,7 @@
 package catalogue;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Formatter;
@@ -70,7 +71,7 @@ public class Basket extends ArrayList<Product> implements Serializable
   {                              
     return super.add( pr );     // Call add in ArrayList
   }
-
+ 
   /**
    * Returns a description of the products in the basket suitable for printing.
    * @return a string description of the basket products

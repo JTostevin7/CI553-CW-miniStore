@@ -5,6 +5,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="lib" path="C:/Users/Bin3abed/git/CI553-CW-miniStore1/lib/db-derby-10.14.2.0-lib/lib/derby.jar">
 		<attributes>
